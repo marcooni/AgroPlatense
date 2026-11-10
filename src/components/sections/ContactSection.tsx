@@ -1,7 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { siteConfig, buildWhatsappLink } from "@/data/site-config";
+import {
+  siteConfig,
+  buildWhatsappLink,
+  isSpecialtyWhatsappInquiry,
+} from "@/data/site-config";
 import SectionTag from "@/components/ui/SectionTag";
 import { MapPin, Phone, Mail, Clock, MessageSquare, Send, CheckCircle2, AlertCircle } from "lucide-react";
 
@@ -14,6 +18,9 @@ export default function ContactSection() {
   });
 
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [submittedWhatsappDisplay, setSubmittedWhatsappDisplay] = useState(
+    siteConfig.contact.whatsappDisplay,
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,8 +39,19 @@ export default function ContactSection() {
 ${formData.consulta.trim()}`;
 
     // Dispara el enlace real hacia WhatsApp
-    const whatsappUrl = buildWhatsappLink(message);
+    const isSpecialtyInquiry = isSpecialtyWhatsappInquiry(
+      `${formData.rubro} ${formData.consulta}`,
+    );
+    const whatsappNumber = isSpecialtyInquiry
+      ? siteConfig.contact.whatsappSpecialty
+      : siteConfig.contact.whatsapp;
+    const whatsappUrl = buildWhatsappLink(message, whatsappNumber);
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+    setSubmittedWhatsappDisplay(
+      isSpecialtyInquiry
+        ? siteConfig.contact.whatsappSpecialtyDisplay
+        : siteConfig.contact.whatsappDisplay,
+    );
     setFormSubmitted(true);
   };
 
@@ -196,7 +214,7 @@ ${formData.consulta.trim()}`;
                   <div>
                     <p className="font-bold">¡Mensaje preparado para WhatsApp!</p>
                     <p className="text-emerald-700/90 mt-0.5">
-                      Si su navegador no abrió WhatsApp automáticamente, puede contactarnos directamente al {siteConfig.contact.whatsappDisplay}.
+                      Si su navegador no abrió WhatsApp automáticamente, puede contactarnos directamente al {submittedWhatsappDisplay}.
                     </p>
                   </div>
                 </div>

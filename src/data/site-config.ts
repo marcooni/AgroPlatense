@@ -9,8 +9,10 @@ export const siteConfig: SiteConfig = {
 
   contact: {
     phone: "+598 4349 2000", // Teléfono de contacto comercial
-    whatsapp: "59899123456", // Número WhatsApp comercial sin signos para API de enlace directo
-    whatsappDisplay: "+598 99 123 456", // Visualización legible
+    whatsapp: "59891265438", // Número WhatsApp general sin signos para API de enlace directo
+    whatsappDisplay: "+598 91 265 438",
+    whatsappSpecialty: "59899655317", // WhatsApp para industria láctea, malla y film
+    whatsappSpecialtyDisplay: "+598 99 655 317",
     email: "contacto@agroplatense.com.uy",
     address: "Ruta 1 y Acceso a Ecilda Paullier",
     city: "Ecilda Paullier",
@@ -49,6 +51,12 @@ export const siteConfig: SiteConfig = {
 export const defaultWhatsappMessage =
   "Hola, me comunico desde el sitio web de AGROPLATENSE. Quisiera consultar sobre sus productos y soluciones.";
 
-export const buildWhatsappLink = (message: string) => {
-  return `https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent(message)}`;
+export const isSpecialtyWhatsappInquiry = (text: string) =>
+  /l[aá]cte|malla|film/i.test(text);
+
+export const buildWhatsappLink = (
+  message: string,
+  phone = siteConfig.contact.whatsapp,
+) => {
+  return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 };

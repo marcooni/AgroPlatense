@@ -1,5 +1,5 @@
 import React from "react";
-import { buildWhatsappLink } from "@/data/site-config";
+import { buildWhatsappLink, siteConfig } from "@/data/site-config";
 import SectionTag from "@/components/ui/SectionTag";
 import { ShieldCheck, MessageSquare, ArrowRight, Gauge, Droplets, CheckCircle2 } from "lucide-react";
 
@@ -98,7 +98,10 @@ export default function DairySection() {
 
             <div className="lg:col-span-5 flex flex-col sm:flex-row lg:flex-col gap-4 justify-center">
               <a
-                href={buildWhatsappLink(whatsappDairyMsg)}
+                href={buildWhatsappLink(
+                  whatsappDairyMsg,
+                  siteConfig.contact.whatsappSpecialty,
+                )}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg hover:shadow-amber-500/30 transition-all text-center"

@@ -2,7 +2,11 @@
 
 import React, { useState, useMemo } from "react";
 import { categories, products } from "@/data/products";
-import { buildWhatsappLink } from "@/data/site-config";
+import {
+  buildWhatsappLink,
+  isSpecialtyWhatsappInquiry,
+  siteConfig,
+} from "@/data/site-config";
 import SectionTag from "@/components/ui/SectionTag";
 import {
   MessageSquare,
@@ -120,6 +124,19 @@ export default function ProductsSection() {
             {filteredProducts.map((product) => {
               const whatsappText = `Hola AGROPLATENSE, me interesa consultar disponibilidad y detalles técnicos del producto: "${product.name}"${product.brand ? ` [${product.brand}]` : ""}.`;
               const currentCategory = categories.find((c) => c.id === product.category);
+              const isSpecialtyProduct =
+                product.category === "industria-lactea" ||
+                isSpecialtyWhatsappInquiry(
+                  [
+                    product.name,
+                    product.description,
+                    currentCategory?.name ?? "",
+                    ...(product.tags ?? []),
+                  ].join(" "),
+                );
+              const whatsappNumber = isSpecialtyProduct
+                ? siteConfig.contact.whatsappSpecialty
+                : siteConfig.contact.whatsapp;
 
               return (
                 <div
@@ -196,7 +213,7 @@ export default function ProductsSection() {
                     {/* Footer de la Card con botón de WhatsApp y enlace directo */}
                     <div className="pt-5 mt-5 border-t border-stone-100 flex items-center gap-3">
                       <a
-                        href={buildWhatsappLink(whatsappText)}
+                        href={buildWhatsappLink(whatsappText, whatsappNumber)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm hover:shadow-md transition-all active:scale-[0.99]"

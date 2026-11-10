@@ -33,6 +33,8 @@ export interface ContactInfo {
   phone: string;
   whatsapp: string;
   whatsappDisplay: string;
+  whatsappSpecialty: string;
+  whatsappSpecialtyDisplay: string;
   email: string;
   address: string;
   city: string;
