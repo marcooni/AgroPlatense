@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AGROPLATENSE — sitio web
 
-## Getting Started
+Next.js 16 · React 19 · Tailwind CSS 4 · TypeScript. Fuentes autoalojadas (Bricolage Grotesque y Figtree).
 
-First, run the development server:
+## Comandos
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+    npm install
+    npm run dev          # http://localhost:3000
+    npm run build && npm start
+    npm run lint
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Rutas
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`/` · `/agropecuario` · `/industria-lactea` · `/productos` (búsqueda y filtro) · `/nosotros` · `/contacto`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Dónde se edita cada cosa
 
-## Learn More
+| Qué | Archivo |
+|---|---|
+| Teléfono, WhatsApp, dirección, correo, horarios, redes, historia | `src/data/site-config.ts` |
+| Categorías y productos | `src/data/catalog.ts` |
+| Menú | `src/data/navigation.ts` |
+| Colores y tipografía | `src/app/globals.css` (bloque `@theme`) |
+| URL pública | variable `NEXT_PUBLIC_SITE_URL` (ver `.env.example`) |
 
-To learn more about Next.js, take a look at the following resources:
+## Regla de datos
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Solo se publica lo confirmado. Todo campo en `null` en `site-config.ts` se **oculta** del sitio y de los datos
+estructurados de SEO. Completar el valor lo activa en todas las páginas, sin tocar componentes.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Pendiente de confirmar con el negocio
 
-## Deploy on Vercel
+- Dirección exacta (calle y número). Con ella, reemplazar `mapsEmbed` por el "Insertar mapa" de Google Maps.
+- Horarios de atención.
+- Correo electrónico.
+- Facebook e Instagram oficiales.
+- Historia y trayectoria (`story`): sin datos documentados no se inventó nada.
+- Catálogo real: cargar productos en `products` (nombre, categoría, descripción, marca, foto). Se listan solos
+  bajo su categoría, con botón de consulta. No cargar ejemplos.
+- Confirmar el agrupamiento de categorías por área (agropecuario / láctea) en `catalog.ts`.
+- Fotografías reales (local, tambo, productos). Copiarlas a `public/images/` y usar `next/image`.
+  Hoy el sitio usa ilustraciones propias, no fotos de stock.
+- Dominio: definir `NEXT_PUBLIC_SITE_URL` antes de publicar.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Formulario de contacto
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Valida los campos y abre WhatsApp con la consulta redactada, al número según el tipo de consulta
+(láctea, insumos y malla → número especializado; otras → número general). No hay backend: el mensaje
+se envía cuando la persona lo confirma en WhatsApp. Para recibir consultas por correo se necesita un
+servicio externo (por ejemplo Resend o Formspree) y un correo de destino.
+
+## Notas técnicas
+
+- `cacheComponents` y `partialPrefetching` se conservan de la configuración original.
+- Con Cache Components el layout no se remonta entre rutas: el menú móvil se cierra solo al navegar.
+- Seguridad: añadir cabeceras (CSP, X-Frame-Options) en `next.config.ts` al elegir hosting.
+
+
+## Fachada de fondo
+`public/images/fachada.webp` se usa como fondo del inicio (`ScrollBackdrop`): queda fija, se acerca a la puerta y se oscurece al hacer scroll. Sin movimiento si el visitante lo reduce. Para cambiarla, reemplazar ese archivo.
+
+## Menú desplegable
+Se arma solo desde `src/data/catalog.ts` (categorías por área). Ferretería es sección propia (`/ferreteria`).

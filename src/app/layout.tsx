@@ -1,110 +1,87 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import "@fontsource-variable/bricolage-grotesque";
+import "@fontsource-variable/figtree";
 import "./globals.css";
 import { siteConfig } from "@/data/site-config";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
+import { WhatsAppFloat } from "@/components/layout/WhatsAppFloat";
+
+export const viewport: Viewport = {
+  themeColor: "#16261a",
+  width: "device-width",
+  initialScale: 1,
+};
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} | Soluciones para el Campo y la Industria Láctea`,
+    default: `${siteConfig.name} | Insumos agropecuarios e industria láctea en Ecilda Paullier`,
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  keywords: siteConfig.seo.keywords,
-  authors: [{ name: siteConfig.name }],
-  creator: siteConfig.name,
-  metadataBase: new URL(siteConfig.url),
-  alternates: {
-    canonical: "/",
-  },
+  applicationName: siteConfig.name,
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
-    locale: siteConfig.seo.locale,
-    url: siteConfig.url,
+    locale: "es_UY",
     siteName: siteConfig.name,
-    title: `${siteConfig.name} - Ecilda Paullier, San José`,
+    title: `${siteConfig.name} | ${siteConfig.tagline}`,
     description: siteConfig.description,
-    images: [
-      {
-        url: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80",
-        width: 1200,
-        height: 630,
-        alt: "AGROPLATENSE - Campo e Industria Láctea en Ecilda Paullier",
-      },
-    ],
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: siteConfig.name }],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} | Soluciones para el Campo y la Industria Láctea`,
+    title: siteConfig.name,
     description: siteConfig.description,
+    images: ["/og.jpg"],
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  // Schema.org LocalBusiness y Store para SEO local de Ecilda Paullier y San José
-  const localBusinessSchema = {
+/** Datos estructurados: solo campos confirmados en site-config. */
+function businessJsonLd() {
+  const { phone, address, social } = siteConfig;
+  const sameAs = [social.facebook, social.instagram].filter(Boolean);
+  return {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+    "@type": "Store",
     name: siteConfig.name,
     description: siteConfig.description,
     url: siteConfig.url,
-    telephone: siteConfig.contact.phone,
-    email: siteConfig.contact.email,
+    logo: `${siteConfig.url}/images/logo.png`,
+    image: `${siteConfig.url}/og.jpg`,
+    telephone: phone.number,
+    ...(siteConfig.email && { email: siteConfig.email }),
     address: {
       "@type": "PostalAddress",
-      streetAddress: siteConfig.contact.address,
-      addressLocality: siteConfig.contact.city,
-      addressRegion: siteConfig.contact.department,
-      addressCountry: "UY",
+      ...(address && { streetAddress: address }),
+      addressLocality: siteConfig.locality,
+      addressRegion: siteConfig.department,
+      addressCountry: siteConfig.countryCode,
     },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: -34.35472,
-      longitude: -57.05436,
-    },
-    hasMap: siteConfig.contact.googleMapsUrl,
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        opens: "08:00",
-        closes: "18:30",
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Saturday"],
-        opens: "08:00",
-        closes: "12:30",
-      },
-    ],
-    priceRange: "$$",
-    areaServed: [
-      "Ecilda Paullier",
-      "San José",
-      "Colonia Valdense",
-      "Nueva Helvecia",
-      "Kiyú",
-      "Libertad",
-      "Uruguay",
-    ],
+    areaServed: [siteConfig.locality, siteConfig.department],
+    hasMap: siteConfig.mapsUrl,
+    ...(sameAs.length && { sameAs }),
   };
+}
 
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es" className="scroll-smooth">
-      <head>
+    <html lang="es-UY">
+      <body className="flex min-h-screen flex-col">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(businessJsonLd()).replace(/</g, "\\u003c"),
+          }}
         />
-      </head>
-      <body className="antialiased min-h-screen flex flex-col bg-[#fbf9f5] text-stone-800">
-        {children}
+        <Header />
+        <main id="contenido" className="flex-1">
+          {children}
+        </main>
+        <Footer />
+        <WhatsAppFloat />
       </body>
     </html>
   );

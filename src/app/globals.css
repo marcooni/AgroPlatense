@@ -1,21 +1,123 @@
 @import "tailwindcss";
 
-@layer base {
-  :root {
-    --brand-green-primary: #1e7033;
-    --brand-green-light: #2d8a42;
-    --brand-green-dark: #155225;
-    --brand-green-accent: #48bb78;
-    --brand-bg: #f8faf7;
-  }
+/*
+ * Identidad: colores tomados del logo (verde hoja, dorado de la semilla, negro)
+ * sobre un verde de campo profundo y un blanco leche.
+ */
+@theme {
+  --color-campo-950: #0f1b12;
+  --color-campo-900: #16261a;
+  --color-campo-800: #1f3825;
+  --color-campo-700: #2a4d33;
+  --color-hoja-600: #3f7d22;
+  --color-hoja-500: #5f9f2e;
+  --color-hoja-300: #a9d17a;
+  --color-maiz-500: #d89a14;
+  --color-maiz-400: #e8ae2c;
+  --color-maiz-300: #f2c75c;
+  --color-leche-50: #f7f9f4;
+  --color-leche-100: #edf1e7;
+  --color-leche-200: #dde4d3;
+  --color-tinta: #1a1f16;
+  --color-tinta-soft: #454e3f;
+  --color-wa: #17703a;
+  --color-wa-hover: #115c2f;
 
+  --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Figtree Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
   html {
     scroll-behavior: smooth;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    -webkit-text-size-adjust: 100%;
   }
-
   body {
-    background-color: #f8faf7;
-    color: #1f2937;
+    background-color: var(--color-leche-50);
+    color: var(--color-tinta);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+    letter-spacing: -0.015em;
+    line-height: 1.08;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-maiz-400);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  ::selection {
+    background: var(--color-maiz-300);
+    color: var(--color-campo-950);
+  }
+}
+
+/* ── Único momento orquestrado: los surcos del hero se dibujan al cargar ── */
+@keyframes surco-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes sol-rise {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+.surco {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: surco-draw 1.6s var(--ease-out-soft) forwards;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+.sol {
+  animation: sol-rise 1.4s var(--ease-out-soft) 0.2s both;
+}
+
+/* Subrayado que se dibuja al pasar el cursor (respuesta a una acción). */
+.link-line {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0 2px;
+  transition: background-size 0.25s var(--ease-out-soft);
+}
+.link-line:hover,
+.link-line[aria-current="page"] {
+  background-size: 100% 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .surco,
+  .sol {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
   }
 }

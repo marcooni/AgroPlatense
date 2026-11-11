@@ -1,146 +1,123 @@
-import React from "react";
 import Image from "next/image";
-import { siteConfig, buildWhatsappLink, defaultWhatsappMessage } from "@/data/site-config";
-import { MapPin, Phone, Mail, Clock, MessageSquare, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { siteConfig } from "@/data/site-config";
+import { waLink } from "@/lib/whatsapp";
+import { navLinks } from "@/data/navigation";
 
-export default function Footer() {
-  const currentYear = 2026;
+export function Footer() {
+  const { whatsapp, phone, address, email, hours, social } = siteConfig;
+  const place = [address, siteConfig.locality, siteConfig.department, siteConfig.country]
+    .filter(Boolean)
+    .join(", ");
 
   return (
-    <footer className="bg-[#0f2e14] text-emerald-100 border-t border-emerald-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Columna 1: Logo Oficial con contenedor blanco de máximo contraste */}
-          <div className="space-y-4">
-            <div className="bg-white px-3 py-2 rounded-2xl inline-block shadow-md">
-              <div className="relative h-12 w-48">
-                <Image
-                  src="/images/logo_full.png"
-                  alt="AGROPLATENSE - Lideramos el Agro"
-                  fill
-                  className="object-contain object-left"
-                />
-              </div>
-            </div>
-            <p className="text-sm text-emerald-200/90 leading-relaxed pt-1">
-              Comercialización de insumos agropecuarios, equipamientos y soluciones especializadas para tambos y la industria láctea del Uruguay. Cercanía, confianza y asesoramiento en el campo.
-            </p>
-            <div className="pt-1">
-              <a
-                href={siteConfig.contact.googleMapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs text-amber-300 hover:text-white font-bold transition-colors"
-              >
-                <MapPin className="w-3.5 h-3.5" />
-                Ver ubicación en Google Maps &rarr;
-              </a>
-            </div>
+    <footer className="bg-campo-950 pb-28 text-leche-200 md:pb-0">
+      <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 md:grid-cols-12 lg:px-8">
+        <div className="md:col-span-5">
+          <div className="inline-block rounded-xl bg-white p-3">
+            <Image
+              src="/images/logo-tagline.png"
+              alt={`${siteConfig.name}, ${siteConfig.slogan}`}
+              width={1000}
+              height={237}
+              sizes="240px"
+              className="h-14 w-auto"
+            />
           </div>
-
-          {/* Columna 2: Navegación Rápida */}
-          <div>
-            <h4 className="text-white font-bold text-sm tracking-wider uppercase mb-4 border-b border-emerald-800/80 pb-2">
-              Secciones
-            </h4>
-            <ul className="space-y-2 text-sm">
-              {[
-                { name: "Inicio", href: "#inicio" },
-                { name: "Empresa", href: "#empresa" },
-                { name: "Catálogo de Productos", href: "#productos" },
-                { name: "Especial: Industria Láctea", href: "#industria-lactea" },
-                { name: "Novedades y Promociones", href: "#novedades" },
-                { name: "Contacto y Consultas", href: "#contacto" },
-              ].map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="flex items-center gap-1.5 text-emerald-200/80 hover:text-amber-300 transition-colors py-0.5"
-                  >
-                    <ChevronRight className="w-3.5 h-3.5 text-emerald-500" />
-                    <span>{link.name}</span>
+          <p className="mt-6 max-w-md text-leche-200/90">
+            Insumos agropecuarios y productos para la industria láctea, en {siteConfig.locality},{" "}
+            {siteConfig.department}.
+          </p>
+          {(social.facebook || social.instagram) && (
+            <ul className="mt-6 flex gap-5 font-semibold">
+              {social.facebook && (
+                <li>
+                  <a href={social.facebook} target="_blank" rel="noopener noreferrer" className="link-line">
+                    Facebook
                   </a>
                 </li>
-              ))}
+              )}
+              {social.instagram && (
+                <li>
+                  <a href={social.instagram} target="_blank" rel="noopener noreferrer" className="link-line">
+                    Instagram
+                  </a>
+                </li>
+              )}
             </ul>
-          </div>
+          )}
+        </div>
 
-          {/* Columna 3: Información de Contacto */}
-          <div>
-            <h4 className="text-white font-bold text-sm tracking-wider uppercase mb-4 border-b border-emerald-800/80 pb-2">
-              Atención y Contacto
-            </h4>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-start gap-2.5">
-                <MapPin className="w-4 h-4 text-amber-300 mt-1 shrink-0" />
+        <nav aria-label="Secciones" className="md:col-span-3">
+          <h2 className="font-display text-lg text-white">Secciones</h2>
+          <ul className="mt-4 space-y-1">
+            {navLinks.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="inline-flex min-h-11 items-center hover:text-maiz-300">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="md:col-span-4">
+          <h2 className="font-display text-lg text-white">Contacto</h2>
+          <ul className="mt-4 space-y-3">
+            <li className="flex gap-3">
+              <MessageCircle size={20} className="mt-0.5 shrink-0 text-maiz-400" aria-hidden />
+              <span>
+                <a href={waLink("especializado")} target="_blank" rel="noopener noreferrer" className="font-semibold text-white hover:text-maiz-300">
+                  {whatsapp.especializado.display}
+                </a>
+                <span className="block text-sm">{whatsapp.especializado.label}</span>
+              </span>
+            </li>
+            <li className="flex gap-3">
+              <MessageCircle size={20} className="mt-0.5 shrink-0 text-maiz-400" aria-hidden />
+              <span>
+                <a href={waLink("general")} target="_blank" rel="noopener noreferrer" className="font-semibold text-white hover:text-maiz-300">
+                  {whatsapp.general.display}
+                </a>
+                <span className="block text-sm">{whatsapp.general.label}</span>
+              </span>
+            </li>
+            <li className="flex gap-3">
+              <Phone size={20} className="mt-0.5 shrink-0 text-maiz-400" aria-hidden />
+              <a href={`tel:${phone.number}`} className="font-semibold text-white hover:text-maiz-300">
+                {phone.display}
+              </a>
+            </li>
+            {email && (
+              <li className="flex gap-3">
+                <Mail size={20} className="mt-0.5 shrink-0 text-maiz-400" aria-hidden />
+                <a href={`mailto:${email}`} className="hover:text-maiz-300">{email}</a>
+              </li>
+            )}
+            <li className="flex gap-3">
+              <MapPin size={20} className="mt-0.5 shrink-0 text-maiz-400" aria-hidden />
+              <span>{place}</span>
+            </li>
+            {hours && (
+              <li className="flex gap-3">
+                <Clock size={20} className="mt-0.5 shrink-0 text-maiz-400" aria-hidden />
                 <span>
-                  {siteConfig.contact.address}, {siteConfig.contact.city}, {siteConfig.contact.department}, Uruguay.
+                  {hours.map((h) => (
+                    <span key={h.label} className="block">
+                      {h.label}: {h.value}
+                    </span>
+                  ))}
                 </span>
               </li>
-              <li className="flex items-center gap-2.5">
-                <Phone className="w-4 h-4 text-emerald-300 shrink-0" />
-                <a href={`tel:${siteConfig.contact.phone}`} className="hover:text-white transition-colors">
-                  {siteConfig.contact.phone}
-                </a>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <MessageSquare className="w-4 h-4 text-amber-300 shrink-0" />
-                <a
-                  href={buildWhatsappLink(defaultWhatsappMessage)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-amber-300 hover:underline font-bold"
-                >
-                  WhatsApp: {siteConfig.contact.whatsappDisplay}
-                </a>
-              </li>
-              <li className="flex items-center gap-2.5">
-                <Mail className="w-4 h-4 text-emerald-300 shrink-0" />
-                <a href={`mailto:${siteConfig.contact.email}`} className="hover:text-white transition-colors">
-                  {siteConfig.contact.email}
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Columna 4: Horarios de Atención */}
-          <div>
-            <h4 className="text-white font-bold text-sm tracking-wider uppercase mb-4 border-b border-emerald-800/80 pb-2">
-              Horario Comercial
-            </h4>
-            <div className="space-y-3 text-sm text-emerald-100">
-              <div className="flex items-start gap-2">
-                <Clock className="w-4 h-4 text-amber-300 mt-0.5 shrink-0" />
-                <div>
-                  <p className="font-semibold text-white">Lunes a Viernes:</p>
-                  <p className="text-xs text-emerald-200">{siteConfig.contact.hours.weekdays.replace("Lunes a Viernes: ", "")}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
-                <Clock className="w-4 h-4 text-emerald-300 mt-0.5 shrink-0" />
-                <div>
-                  <p className="font-semibold text-white">Sábados:</p>
-                  <p className="text-xs text-emerald-200">{siteConfig.contact.hours.saturday.replace("Sábados: ", "")}</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
-                <Clock className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
-                <div>
-                  <p className="font-semibold text-white">Domingos:</p>
-                  <p className="text-xs text-emerald-300/70">{siteConfig.contact.hours.sunday.replace("Domingos: ", "")}</p>
-                </div>
-              </div>
-            </div>
-          </div>
+            )}
+          </ul>
         </div>
-
-        {/* Barra Inferior */}
-        <div className="mt-12 pt-6 border-t border-emerald-900 flex flex-col sm:flex-row items-center justify-between text-xs text-emerald-300/80 gap-3">
-          <p>© {currentYear} {siteConfig.name} - Lideramos el Agro. Todos los derechos reservados. Ecilda Paullier, San José, Uruguay.</p>
-          <p className="text-[11px] text-emerald-400 font-medium">
-            Insumos agropecuarios y equipamiento para la producción lechera.
-          </p>
-        </div>
+      </div>
+      <div className="border-t border-white/10">
+        <p className="mx-auto max-w-7xl px-4 py-6 text-sm text-leche-200/80 sm:px-6 lg:px-8">
+          © {siteConfig.name}. Todos los derechos reservados.
+        </p>
       </div>
     </footer>
   );

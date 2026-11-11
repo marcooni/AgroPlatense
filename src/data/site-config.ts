@@ -1,54 +1,70 @@
-import type { SiteConfig } from "@/types";
+/**
+ * ÚNICO lugar donde se editan los datos del negocio.
+ *
+ * Regla: solo se publica lo que el negocio confirmó. Todo campo en `null`
+ * se oculta del sitio (no se muestra "a confirmar" al público) y no entra
+ * en los datos estructurados de SEO. Para activarlo, completar el valor.
+ */
 
-export const siteConfig: SiteConfig = {
+export type WhatsappChannel = {
+  /** Solo dígitos, formato internacional. Ej: 59899655317 */
+  number: string;
+  /** Texto para mostrar. Ej: +598 99 655 317 */
+  display: string;
+  /** Qué tipo de consultas atiende este número. */
+  label: string;
+};
+
+export const siteConfig = {
   name: "AGROPLATENSE",
-  tagline: "Soluciones para el campo y la industria láctea",
+  slogan: "Lideramos el Agro",
+  tagline: "Insumos para el campo y el tambo",
   description:
-    "En AGROPLATENSE acompañamos al sector productivo con insumos, equipamiento y soluciones para el trabajo agropecuario y la industria láctea. Ubicados en Ecilda Paullier, San José, Uruguay.",
-  url: "https://agroplatense.com.uy", // Configuración base editable
+    "AGROPLATENSE vende insumos agropecuarios y productos para la industria láctea en Ecilda Paullier, San José, Uruguay. Consultas directas por WhatsApp.",
 
-  contact: {
-    phone: "+598 4349 2000", // Teléfono de contacto comercial
-    whatsapp: "59899123456", // Número WhatsApp comercial sin signos para API de enlace directo
-    whatsappDisplay: "+598 99 123 456", // Visualización legible
-    email: "contacto@agroplatense.com.uy",
-    address: "Ruta 1 y Acceso a Ecilda Paullier",
-    city: "Ecilda Paullier",
-    department: "San José",
-    country: "Uruguay",
-    googleMapsUrl: "https://share.google/PZzrmAQLGfmBREoId",
-    googleMapsEmbed:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13143.766127457788!2d-57.05436!3d-34.35472!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95a201c13d7401c9%3A0xb3e120d58852e9a2!2sEcilda%20Paullier%2C%20San%20Jos%C3%A9%20Department!5e0!3m2!1sen!2suy!4v1700000000000",
-    hours: {
-      weekdays: "Lunes a Viernes: 08:00 a 12:00 y 14:00 a 18:30 hs",
-      saturday: "Sábados: 08:00 a 12:30 hs",
-      sunday: "Domingos: Cerrado",
+  /** Definir NEXT_PUBLIC_SITE_URL en producción (sitemap, canonical, Open Graph). */
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+
+  locality: "Ecilda Paullier",
+  department: "San José",
+  country: "Uruguay",
+  countryCode: "UY",
+
+  // ── Confirmado ────────────────────────────────────────────────
+  phone: { number: "+59843492000", display: "+598 4349 2000" },
+
+  whatsapp: {
+    /** Industria láctea, insumos y malla. */
+    especializado: {
+      number: "59899655317",
+      display: "+598 99 655 317",
+      label: "Industria láctea, insumos y malla",
     },
-    social: {
-      facebook: "https://facebook.com/agroplatense",
-      instagram: "https://instagram.com/agroplatense",
+    /** Resto de las consultas. */
+    general: {
+      number: "59891265438",
+      display: "+598 91 265 438",
+      label: "Otras consultas",
     },
+  } satisfies Record<string, WhatsappChannel>,
+
+  // Enlace de Google Maps provisto por el negocio.
+  mapsUrl: "https://share.google/PZzrmAQLGfmBREoId",
+  // Vista de localidad. Reemplazar por el "Insertar mapa" de Google Maps
+  // cuando esté confirmada la dirección exacta.
+  mapsEmbed:
+    "https://www.google.com/maps?q=Ecilda+Paullier,+San+Jos%C3%A9,+Uruguay&output=embed",
+
+  // ── Pendiente de confirmar con el negocio (null = oculto) ─────
+  address: null as string | null, // calle y número
+  email: null as string | null,
+  hours: null as { label: string; value: string }[] | null,
+  social: {
+    facebook: null as string | null,
+    instagram: null as string | null,
   },
+  /** Historia de la empresa: lista de párrafos. Se muestra en /nosotros si existe. */
+  story: null as string[] | null,
+} as const;
 
-  seo: {
-    keywords: [
-      "AGROPLATENSE",
-      "Agropecuaria en Ecilda Paullier",
-      "Insumos agropecuarios San José Uruguay",
-      "Equipamiento para industria láctea Uruguay",
-      "Insumos para tambos Uruguay",
-      "Productos para establecimientos lecheros",
-      "Sanidad animal y tambo San José",
-      "Repuestos de ordeñe San José",
-    ],
-    locale: "es_UY",
-    region: "UY-SJ",
-  },
-};
-
-export const defaultWhatsappMessage =
-  "Hola, me comunico desde el sitio web de AGROPLATENSE. Quisiera consultar sobre sus productos y soluciones.";
-
-export const buildWhatsappLink = (message: string) => {
-  return `https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent(message)}`;
-};
+export type SiteConfig = typeof siteConfig;
