@@ -57,7 +57,7 @@ servicio externo (por ejemplo Resend o Formspree) y un correo de destino.
 
 
 ## Fachada de fondo
-`public/images/fachada.webp` se usa como fondo del inicio (`ScrollBackdrop`): queda fija, se acerca a la puerta y se oscurece al hacer scroll. Sin movimiento si el visitante lo reduce. Para cambiarla, reemplazar ese archivo.
+`public/images/fachada.webp` es el fondo del hero del inicio (imagen fija con degradado oscuro para leer el texto). Para cambiarla, reemplazar ese archivo.
 
 ## Menú desplegable
 Se arma solo desde `src/data/catalog.ts` (categorías por área). Ferretería es sección propia (`/ferreteria`).
