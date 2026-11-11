@@ -1,0 +1,8 @@
+Subir acá las imágenes de productos y categorías (.webp, .jpg, .jpeg o .png).
+
+El NOMBRE del archivo es el id:
+  - Categoría:  semillas.jpg, veterinaria.jpg, alambrado.jpg, almidones.jpg, ferreteria.jpg ...
+    (ids en src/data/catalog.ts, campo "id" de cada categoría)
+  - Producto:   el "id" que le pongas en la lista `products` de catalog.ts (ej: alambre-liso.jpg)
+
+Si no hay imagen, la tarjeta muestra un recuadro neutro. Tamaño sugerido: 800x600 px (4:3).
