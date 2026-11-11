@@ -17,7 +17,7 @@ const filters: { id: Filter; label: string }[] = [
   { id: "ferreteria", label: areas.ferreteria.name },
 ];
 
-export function ProductExplorer() {
+export function ProductExplorer({ images = {} }: { images?: Record<string, string> }) {
   const inputId = useId();
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("todas");
@@ -102,7 +102,7 @@ export function ProductExplorer() {
 
       <div className="mt-4">
         {count > 0 ? (
-          <CategoryRows categories={visibleCategories} products={visibleProducts} headingLevel={2} />
+          <CategoryRows categories={visibleCategories} products={visibleProducts} images={images} headingLevel={2} />
         ) : (
           <div className="rounded-2xl bg-leche-100 p-8 md:p-10">
             <h2 className="text-2xl font-semibold">No encontramos “{query}” en las categorías</h2>

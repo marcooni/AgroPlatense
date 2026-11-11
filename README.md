@@ -61,3 +61,6 @@ servicio externo (por ejemplo Resend o Formspree) y un correo de destino.
 
 ## Menú desplegable
 Se arma solo desde `src/data/catalog.ts` (categorías por área). Ferretería es sección propia (`/ferreteria`).
+
+## Imágenes de productos
+Subir las fotos a `public/images/productos/` con el id como nombre (`semillas.jpg`, o el id del producto). Instrucciones en `LEEME.txt` de esa carpeta. Los productos se cargan en `products` de `src/data/catalog.ts`.

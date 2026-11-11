@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/sections/PageHero";
+import { productImages } from "@/lib/images";
 import { ProductExplorer } from "@/components/sections/ProductExplorer";
 import { ContactBand } from "@/components/sections/ContactBand";
 import { Container } from "@/components/ui/Container";
@@ -20,7 +21,7 @@ export default function ProductosPage() {
         lead="Buscá una categoría y consultá directo por WhatsApp."
       />
       <Container as="section" className="py-16 md:py-24">
-        <ProductExplorer />
+        <ProductExplorer images={productImages()} />
       </Container>
       <ContactBand />
     </>

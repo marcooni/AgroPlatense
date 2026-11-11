@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { MessageCircle } from "lucide-react";
 import { categoriesByArea, products } from "@/data/catalog";
 import { waLink } from "@/lib/whatsapp";
+import { productImages } from "@/lib/images";
 import { PageHero } from "@/components/sections/PageHero";
 import { CategoryRows } from "@/components/sections/CategoryRows";
 import { ContactBand } from "@/components/sections/ContactBand";
@@ -36,7 +37,7 @@ export default function FerreteriaPage() {
           Elegí la categoría y consultanos por lo que necesitás.
         </p>
         <div className="mt-10">
-          <CategoryRows categories={categoriesByArea("ferreteria")} products={products} />
+          <CategoryRows categories={categoriesByArea("ferreteria")} products={products} images={productImages()} />
         </div>
       </Container>
 
