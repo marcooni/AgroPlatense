@@ -20,7 +20,9 @@ export function Header() {
   // Submenú abierto (escritorio y móvil), asociado a la ruta para cerrarse al navegar.
   const [sub, setSub] = useState<{ path: string; href: string } | null>(null);
   const subOpen = (href: string) => sub?.path === pathname && sub.href === href;
-  const toggleSub = (href: string) => setSub(subOpen(href) ? null : { path: pathname, href });
+  // Con mouse el hover ya abrió el submenú: el clic no debe cerrarlo. Con teclado/táctil alterna.
+  const toggleSub = (href: string, e?: React.MouseEvent) =>
+    setSub(subOpen(href) && !(e && e.detail > 0 && e.currentTarget.closest("li")?.matches(":hover")) ? null : { path: pathname, href });
   const navRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -99,7 +101,7 @@ export function Header() {
                     </Link>
                     <button
                       type="button"
-                      onClick={() => toggleSub(l.href)}
+                      onClick={(e) => toggleSub(l.href, e)}
                       aria-expanded={subOpen(l.href)}
                       aria-controls={`sub-${l.href.slice(1)}`}
                       aria-label={`Categorías de ${l.label}`}
