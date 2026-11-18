@@ -35,6 +35,7 @@ export function Thumb({
           fill
           priority={priority}
           sizes={sizes}
+          unoptimized={/^https?:/.test(src)}
           className="object-cover transition-transform duration-500 ease-[var(--ease-out-soft)] group-hover:scale-[1.05]"
         />
       ) : (
@@ -109,7 +110,7 @@ export function ProductCard({
   const channel = getCategory(p.category)?.channel ?? "especializado";
   return (
     <li className={card}>
-      <Thumb src={p.image ?? image} alt="" categoryId={p.category} priority={priority} />
+      <Thumb src={image ?? p.image} alt="" categoryId={p.category} priority={priority} />
       {p.featured && (
         <span className="absolute left-3 top-3 rounded-full bg-maiz-400 px-3 py-1 text-xs font-bold uppercase tracking-wide text-campo-950">
           Destacado

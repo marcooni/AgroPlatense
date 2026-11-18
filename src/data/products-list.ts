@@ -2,7 +2,8 @@
  * Listado inicial de productos por categoría (nombres genéricos, sin marcas,
  * precios ni presentaciones). Reemplazar o completar con el catálogo real:
  * agregar marca, descripción, presentaciones, specs y precio en `catalog.ts`.
- * Formato: "Nombre | descripción breve".
+ * Formato: "Nombre | descripción breve" o "Nombre | descripción | https://url-de-la-imagen".
+ * La imagen puede ser una URL completa o una ruta de /public (ej: /images/productos/urea.jpg).
  */
 export const productList: Record<string, string[]> = {
   semillas: [

@@ -7,6 +7,7 @@
  */
 
 import { productList } from "./products-list";
+import { productImageCredits, type ImageCredit } from "./product-images";
 
 export type AreaId = "agropecuario" | "lacteo" | "ferreteria";
 export type Channel = "especializado" | "general";
@@ -44,6 +45,8 @@ export type Product = {
   priceUnit?: string;
   /** Marca como destacado en las listas. */
   featured?: boolean;
+  /** Crédito de la foto cuando es de un banco libre (Wikimedia Commons). */
+  imageCredit?: ImageCredit;
 };
 
 export const categories: Category[] = [
@@ -159,8 +162,17 @@ const slug = (t: string) =>
 /** Listado inicial (genérico) desde products-list.ts. Reemplazar por el catálogo real. */
 export const products: Product[] = Object.entries(productList).flatMap(([category, rows]) =>
   rows.map((row) => {
-    const [name, description] = row.split(" | ");
-    return { id: slug(name), name, category, description };
+    const [name, description, image] = row.split(" | ");
+    const id = slug(name);
+    const credit = productImageCredits[id];
+    return {
+      id,
+      name,
+      category,
+      description,
+      ...(image && { image }),
+      ...(!image && credit && { image: credit.url, imageCredit: credit }),
+    };
   }),
 );
 

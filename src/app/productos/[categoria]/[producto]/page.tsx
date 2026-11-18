@@ -56,7 +56,7 @@ async function ProductoContent({
   if (!c || !p) notFound();
 
   const images = productImages();
-  const gallery = [p.image ?? images[p.id], ...(p.gallery ?? [])].filter((s): s is string => Boolean(s));
+  const gallery = [images[p.id] ?? p.image, ...(p.gallery ?? [])].filter((s): s is string => Boolean(s));
   const related = products.filter((x) => x.category === c.id && x.id !== p.id).slice(0, 4);
   const area = areas[c.area];
 
@@ -66,7 +66,7 @@ async function ProductoContent({
     name: p.name,
     ...(p.description && { description: p.description }),
     ...(p.brand && { brand: { "@type": "Brand", name: p.brand } }),
-    ...(gallery.length && { image: gallery.map((g) => `${siteConfig.url}${g}`) }),
+    ...(gallery.length && { image: gallery.map((g) => (/^https?:/.test(g) ? g : `${siteConfig.url}${g}`)) }),
     category: c.name,
     url: `${siteConfig.url}${productPath(p)}`,
     ...(p.price && {
@@ -98,7 +98,17 @@ async function ProductoContent({
       </Container>
 
       <Container as="section" className="grid gap-10 py-8 md:py-12 lg:grid-cols-2 lg:gap-16">
-        <ProductGallery images={gallery} name={p.name} categoryId={c.id} />
+        <div>
+          <ProductGallery images={gallery} name={p.name} categoryId={c.id} />
+          {p.imageCredit && gallery[0] === p.imageCredit.url && (
+            <p className="mt-3 text-xs text-tinta-soft">
+              Foto de referencia: {p.imageCredit.author} ·{" "}
+              <a href={p.imageCredit.page} target="_blank" rel="noopener noreferrer" className="underline">
+                {p.imageCredit.license}, Wikimedia Commons
+              </a>
+            </p>
+          )}
+        </div>
 
         <div className="lg:sticky lg:top-28 lg:self-start">
           {p.brand && <p className="font-semibold uppercase tracking-wide text-hoja-600">{p.brand}</p>}

@@ -27,6 +27,7 @@ export function ProductGallery({
             alt={name}
             fill
             priority
+            unoptimized={/^https?:/.test(images[active])}
             sizes="(min-width:1024px) 50vw, 100vw"
             className="animate-[fade-in_0.3s_ease-out] object-cover"
           />
@@ -50,7 +51,7 @@ export function ProductGallery({
                   i === active ? "border-campo-900" : "border-leche-200 hover:border-hoja-300",
                 )}
               >
-                <Image src={src} alt="" fill sizes="80px" className="object-cover" />
+                <Image src={src} alt="" fill sizes="80px" unoptimized={/^https?:/.test(src)} className="object-cover" />
               </button>
             </li>
           ))}
