@@ -6,6 +6,8 @@
  * El explorador de /productos lo muestra automáticamente.
  */
 
+import { productList } from "./products-list";
+
 export type AreaId = "agropecuario" | "lacteo" | "ferreteria";
 export type Channel = "especializado" | "general";
 
@@ -28,6 +30,20 @@ export type Product = {
   brand?: string;
   /** Ruta dentro de /public. Ej: "/images/productos/pezoneras.jpg" */
   image?: string;
+  /** Fotos adicionales para la galería del detalle. */
+  gallery?: string[];
+  /** Presentaciones disponibles (ej: "Bolsa 25 kg"). Se elige al consultar. */
+  presentations?: string[];
+  /** Ficha técnica: pares etiqueta / valor. Solo datos confirmados. */
+  specs?: { label: string; value: string }[];
+  /** Puntos destacados, uno por línea. */
+  highlights?: string[];
+  /** Precio en pesos uruguayos. Si no se define, se muestra "Consultar precio". */
+  price?: number;
+  /** Texto de la unidad del precio. Ej: "por kg". */
+  priceUnit?: string;
+  /** Marca como destacado en las listas. */
+  featured?: boolean;
 };
 
 export const categories: Category[] = [
@@ -137,8 +153,16 @@ export const categories: Category[] = [
   },
 ];
 
-/** Vacío hasta recibir el catálogo real. No cargar productos de ejemplo. */
-export const products: Product[] = [];
+const slug = (t: string) =>
+  t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+/** Listado inicial (genérico) desde products-list.ts. Reemplazar por el catálogo real. */
+export const products: Product[] = Object.entries(productList).flatMap(([category, rows]) =>
+  rows.map((row) => {
+    const [name, description] = row.split(" | ");
+    return { id: slug(name), name, category, description };
+  }),
+);
 
 export const areas: Record<
   AreaId,
@@ -166,3 +190,16 @@ export const areas: Record<
 
 export const categoriesByArea = (area: AreaId) =>
   categories.filter((c) => c.area === area);
+
+export const getCategory = (id: string) => categories.find((c) => c.id === id);
+export const productsOf = (categoryId: string) =>
+  products.filter((p) => p.category === categoryId);
+export const getProduct = (categoryId: string, productId: string) =>
+  products.find((p) => p.category === categoryId && p.id === productId);
+
+export const categoryPath = (categoryId: string) => `/productos/${categoryId}`;
+export const productPath = (p: Pick<Product, "category" | "id">) =>
+  `/productos/${p.category}/${p.id}`;
+
+export const formatPrice = (n: number) =>
+  new Intl.NumberFormat("es-UY", { style: "currency", currency: "UYU", maximumFractionDigits: 0 }).format(n);

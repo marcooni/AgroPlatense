@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/bricolage-grotesque";
 import "@fontsource-variable/figtree";
@@ -6,6 +7,7 @@ import { siteConfig } from "@/data/site-config";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppFloat } from "@/components/layout/WhatsAppFloat";
+import { ConsultaDrawer } from "@/components/cart/ConsultaDrawer";
 
 export const viewport: Viewport = {
   themeColor: "#16261a",
@@ -76,12 +78,15 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             __html: JSON.stringify(businessJsonLd()).replace(/</g, "\\u003c"),
           }}
         />
-        <Header />
+        <Suspense fallback={<div className="h-16 border-b border-leche-200 bg-leche-50 md:h-20" />}>
+          <Header />
+        </Suspense>
         <main id="contenido" className="flex-1">
           {children}
         </main>
         <Footer />
         <WhatsAppFloat />
+        <ConsultaDrawer />
       </body>
     </html>
   );

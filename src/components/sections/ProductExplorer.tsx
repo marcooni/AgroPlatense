@@ -45,7 +45,7 @@ export function ProductExplorer({ images = {} }: { images?: Record<string, strin
       <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
         <div className="w-full lg:max-w-md">
           <label htmlFor={inputId} className="mb-2 block font-semibold">
-            Buscar una categoría
+            Buscar productos o categorías
           </label>
           <div className="relative">
             <Search
@@ -101,8 +101,9 @@ export function ProductExplorer({ images = {} }: { images?: Record<string, strin
       </p>
 
       <div className="mt-4">
+        <h2 className="sr-only">Categorías y productos</h2>
         {count > 0 ? (
-          <CategoryRows categories={visibleCategories} products={visibleProducts} images={images} headingLevel={2} />
+          <CategoryRows categories={visibleCategories} products={visibleProducts} images={images} />
         ) : (
           <div className="rounded-2xl bg-leche-100 p-8 md:p-10">
             <h2 className="text-2xl font-semibold">No encontramos “{query}” en las categorías</h2>

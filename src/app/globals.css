@@ -106,9 +106,46 @@
   background-size: 100% 2px;
 }
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+  }
+}
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+/* Las tarjetas aparecen al entrar en pantalla (solo donde el navegador lo soporta). */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: reveal-up linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 35%;
+  }
+}
+
+/* Transición suave entre páginas (navegadores con View Transitions). */
+@view-transition {
+  navigation: auto;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  .reveal {
+    animation: none;
+  }
+  @view-transition {
+    navigation: none;
   }
   .surco,
   .sol {

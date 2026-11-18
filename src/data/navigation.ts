@@ -7,7 +7,7 @@ export type NavLink = {
 };
 
 const sub = (area: Parameters<typeof categoriesByArea>[0]) =>
-  categoriesByArea(area).map((c) => ({ href: `/productos#${c.id}`, label: c.name }));
+  categoriesByArea(area).map((c) => ({ href: `/productos/${c.id}`, label: c.name }));
 
 export const navLinks: NavLink[] = [
   { href: "/", label: "Inicio" },

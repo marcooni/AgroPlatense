@@ -9,6 +9,7 @@ import { siteConfig } from "@/data/site-config";
 import { waLink } from "@/lib/whatsapp";
 import { navLinks } from "@/data/navigation";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { ConsultaButton } from "@/components/cart/ConsultaDrawer";
 
 export function Header() {
   const pathname = usePathname();
@@ -163,17 +164,20 @@ export function Header() {
           </ButtonLink>
         </div>
 
-        <button
-          ref={toggleRef}
-          type="button"
-          onClick={() => setOpenPath(open ? null : pathname)}
-          aria-expanded={open}
-          aria-controls="menu-movil"
-          aria-label={open ? "Cerrar menú" : "Abrir menú"}
-          className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-campo-900 hover:bg-leche-100 lg:hidden"
-        >
-          {open ? <X size={26} aria-hidden /> : <Menu size={26} aria-hidden />}
-        </button>
+        <div className="flex items-center gap-1">
+          <ConsultaButton />
+          <button
+            ref={toggleRef}
+            type="button"
+            onClick={() => setOpenPath(open ? null : pathname)}
+            aria-expanded={open}
+            aria-controls="menu-movil"
+            aria-label={open ? "Cerrar menú" : "Abrir menú"}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-lg text-campo-900 hover:bg-leche-100 lg:hidden"
+          >
+            {open ? <X size={26} aria-hidden /> : <Menu size={26} aria-hidden />}
+          </button>
+        </div>
       </div>
 
       {open && (

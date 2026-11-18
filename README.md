@@ -11,7 +11,7 @@ Next.js 16 · React 19 · Tailwind CSS 4 · TypeScript. Fuentes autoalojadas (Br
 
 ## Rutas
 
-`/` · `/agropecuario` · `/industria-lactea` · `/productos` (búsqueda y filtro) · `/nosotros` · `/contacto`
+`/` · `/agropecuario` · `/industria-lactea` · `/productos` (búsqueda y filtro) · `/productos/[categoria]` · `/productos/[categoria]/[producto]` · `/nosotros` · `/contacto`
 
 ## Dónde se edita cada cosa
 
@@ -35,7 +35,7 @@ estructurados de SEO. Completar el valor lo activa en todas las páginas, sin to
 - Correo electrónico.
 - Facebook e Instagram oficiales.
 - Historia y trayectoria (`story`): sin datos documentados no se inventó nada.
-- Catálogo real: cargar productos en `products` (nombre, categoría, descripción, marca, foto). Se listan solos
+- Catálogo real: el listado actual (`src/data/products-list.ts`) es genérico, sin marcas ni precios; reemplazarlo con el real (nombre, marca, descripción, presentaciones, precio, foto).
   bajo su categoría, con botón de consulta. No cargar ejemplos.
 - Confirmar el agrupamiento de categorías por área (agropecuario / láctea) en `catalog.ts`.
 - Fotografías reales (local, tambo, productos). Copiarlas a `public/images/` y usar `next/image`.
@@ -64,3 +64,11 @@ Se arma solo desde `src/data/catalog.ts` (categorías por área). Ferretería es
 
 ## Imágenes de productos
 Subir las fotos a `public/images/productos/` con el id como nombre (`semillas.jpg`, o el id del producto). Instrucciones en `LEEME.txt` de esa carpeta. Los productos se cargan en `products` de `src/data/catalog.ts`.
+
+## Catálogo, detalle y "Mi consulta"
+
+- Cada categoría tiene su página (`/productos/<id>`) y cada producto cargado en `products` tiene su detalle
+  (`/productos/<categoria>/<id>`): galería, presentaciones, ficha técnica, precio opcional (`price`) y productos relacionados.
+- "Mi consulta" (ícono del encabezado): la persona arma una lista de productos/categorías y la envía en un solo
+  mensaje de WhatsApp (uno por número, según el rubro). Se guarda en el navegador, sin backend.
+- Sin `price` se muestra "Consultar precio". Fotos: `public/images/productos/<id>.jpg` (ver `LEEME.txt`).

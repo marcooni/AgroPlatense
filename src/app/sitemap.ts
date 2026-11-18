@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/data/site-config";
+import { categories, categoryPath, productPath, products } from "@/data/catalog";
 
 const routes: { path: string; priority: number }[] = [
   { path: "", priority: 1 },
@@ -12,7 +13,11 @@ const routes: { path: string; priority: number }[] = [
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return routes.map(({ path, priority }) => ({
+  const detail = [
+    ...categories.map((c) => ({ path: categoryPath(c.id), priority: 0.7 })),
+    ...products.map((p) => ({ path: productPath(p), priority: 0.6 })),
+  ];
+  return [...routes, ...detail].map(({ path, priority }) => ({
     url: `${siteConfig.url}${path}`,
     priority,
   }));
